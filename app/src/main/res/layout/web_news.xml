@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/web_vp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/web_toolbar">
+
+        <WebView
+            android:id="@+id/web_news"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </WebView>
+    </androidx.viewpager.widget.ViewPager>
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/web_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentBottom="true"
+        android:theme="@style/Base.Theme.AppCompat.Light"
+        app:contentInsetStart="0dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageButton
+                android:id="@+id/web_tb_back"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/ic_back"
+                tools:ignore="ContentDescription" />
+
+
+            <View
+                android:id="@+id/web_tb_line"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:layout_toEndOf="@id/web_tb_back"
+                android:layout_toRightOf="@id/web_tb_back"
+                android:background="@color/lineColor" />
+        </RelativeLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+</RelativeLayout>
