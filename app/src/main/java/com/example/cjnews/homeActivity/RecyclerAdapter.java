@@ -1,6 +1,9 @@
 package com.example.cjnews.homeActivity;
 
+import android.annotation.SuppressLint;
+import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -24,8 +27,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
     private final static int ITEM_TYPE_LINE = 2;
     private List<NewsBean> newsList;
     private static List<TopNewsBean> imageViewList;
-    private static boolean isScroll = false;
-    private final static int SLEEP_TIME = 4000;//轮播图间隔时间
+    private final static int SLEEP_TIME = 3000;//轮播图间隔时间
 //    private int previousPosition = 0;
 //    private List<View> mDots;
 
@@ -107,7 +109,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
     }
 
     static class PicVH extends RecyclerView.ViewHolder {
-        final ViewPager viewPager;
+        Handler vpHandler = new Handler();
+        ViewPager viewPager;
         final TextView titleView;
         final TextView hintView;
 
@@ -116,28 +119,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
             titleView = itemView.findViewById(R.id.home_recy_vp_title);
             hintView = itemView.findViewById(R.id.home_recy_vp_hint);
             viewPager = itemView.findViewById(R.id.home_recy_vp);
-            new Thread() {
-                public void run() {
-                    isScroll=false;
-                    while (!isScroll) {
-                        try {
-                            Thread.sleep(SLEEP_TIME);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        viewPager.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
-                            }
-                        });
-                    }
-                }
-            }.start();
             viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
                 }
 
                 @Override
@@ -149,9 +133,46 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
 
                 @Override
                 public void onPageScrollStateChanged(int state) {
-
                 }
             });
+            autoScroll(viewPager, SLEEP_TIME);
+        }
+
+        @SuppressLint("ClickableViewAccessibility")
+        private void viewPagerOnTouch(final ViewPager viewPager, final int pauseTime) {
+            //通过viewPager去设置触摸滑动的点击事件
+            viewPager.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_MOVE:
+                            vpHandler.removeMessages(0);
+                            //移除回调函数和消息
+                        case MotionEvent.ACTION_DOWN:
+                            vpHandler.removeCallbacksAndMessages(null);
+                            break;
+                        //当你触摸时停止自动滑动
+                        case MotionEvent.ACTION_UP:
+                            PicVH.this.autoScroll(viewPager, pauseTime);
+                            break;
+                    }
+                    return false;
+                }
+            });
+        }
+
+        private void autoScroll(final ViewPager viewPager, final int pauseTime) {
+            vpHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    //获取当前的轮播的位置,通过currentItem+1实现切换到下一张
+                    viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
+                    //通过vpHandler请求延迟3秒
+                    vpHandler.postDelayed(this, pauseTime);
+                    //调用触摸滑动事件方法
+                    viewPagerOnTouch(viewPager, pauseTime);
+                }
+            }, pauseTime);
         }
     }
 

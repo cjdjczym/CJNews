@@ -100,4 +100,5 @@ public class Act_News extends AppCompatActivity {
         viewPager.setAdapter(new NewsViewPagerAdapter(webViewList));
         viewPager.setCurrentItem(newPosition);
     }
+
 }

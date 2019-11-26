@@ -20,7 +20,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".newsActivity.Act_News" />
+        <activity
+            android:name=".newsActivity.Act_News"
+            android:launchMode="singleTask" />
         <activity android:name=".userActivity.Act_User" />
     </application>
 
