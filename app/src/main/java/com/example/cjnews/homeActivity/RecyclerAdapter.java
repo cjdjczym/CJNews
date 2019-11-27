@@ -28,8 +28,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
     private List<NewsBean> newsList;
     private static List<TopNewsBean> imageViewList;
     private final static int SLEEP_TIME = 3000;//轮播图间隔时间
-//    private int previousPosition = 0;
-//    private List<View> mDots;
+    private int previousPosition = 0;
+    private List<View> mDots;
 
     RecyclerAdapter(List<NewsBean> newsList, List<TopNewsBean> imageViewList) {
         this.newsList = newsList;

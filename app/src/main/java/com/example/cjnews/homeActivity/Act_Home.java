@@ -157,7 +157,7 @@ public class Act_Home extends AppCompatActivity {
         } else if (hour >= 18 && hour <= 21) {
             greedText.setText("别太累了！");
         } else {
-            greedText.setText("晚安鸭！");
+            greedText.setText("早点睡鸭！");
         }
     }
 
@@ -196,8 +196,8 @@ public class Act_Home extends AppCompatActivity {
     }
 
     //异步请求：
-    public void netEnqueue(String date, final boolean bool) {//true-1-clear & false-0-nonClear
-        Client.sendOkHttpRequest(date, new Callback() {
+    public void netEnqueue(String url, final boolean bool) {//true-1-clear & false-0-nonClear
+        Client.sendOkHttpRequest(url, new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 e.printStackTrace();
@@ -221,9 +221,8 @@ public class Act_Home extends AppCompatActivity {
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            Act_Home.msgString = msg.obj.toString();
             Gson gson = new Gson();
-            final Bean bean = gson.fromJson(msgString, Bean.class);
+            final Bean bean = gson.fromJson(msg.obj.toString(), Bean.class);
             if (msg.what == 1) {
                 clearLists();
                 addImageViewList(bean);
